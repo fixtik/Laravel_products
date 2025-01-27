@@ -24,7 +24,7 @@
                             <td><a href="{{route('products.edit', $item->id)}}">{{$item->name}}</a></td>
                             <td>{{$item->status}}</td>
                             <td>
-                                @if(!empty($item->data))
+                                @if(!empty($item->data) and $item->data!='{}')
                                     @foreach($item->data as $key => $value)
                                             {{$key}} : {{$value}}<br>
                                     @endforeach

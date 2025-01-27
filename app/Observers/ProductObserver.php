@@ -3,7 +3,9 @@
 namespace App\Observers;
 
 use App\Models\Product;
-use function Symfony\Component\String\s;
+use App\Notifications\CreateProductNotification;
+use App\Jobs\CreateNewProductJob;
+
 
 class ProductObserver
 {
@@ -12,7 +14,20 @@ class ProductObserver
      */
     public function created(Product $product): void
     {
-       //
+        $username = auth()->user();
+        if ($username) {
+            $username->notify(new CreateProductNotification($product->name, $username->name));
+            dispatch(new CreateNewProductJob());
+        }
+
+
+    }
+
+    public function updating(Product $product)
+    {
+        if(!auth()->user()->HasRole('admin') && $product->isDirty('article')) {
+            return false;
+        }
     }
 
     /**
@@ -23,13 +38,6 @@ class ProductObserver
        //
     }
 
-    /**
-     * Handle the Product "updating" event.
-     */
-    public function updating(Product $product)
-    {
-        //
-    }
 
     /**
      * Handle the Product "deleted" event.
@@ -55,14 +63,5 @@ class ProductObserver
         //
     }
 
-    /**
-     * Получение статуса объекта в зависимости от выбора пользователя
-     * @param $status
-     * @return string
-     */
-    protected function getStatus($status)
-    {
-        $status == 'Доступен' ?  $status = "available" : $status = 'unavailable';
-        return $status;
-    }
+
 }

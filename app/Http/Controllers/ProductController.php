@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductCreateRequest;
 use App\Models\Product;
-use Illuminate\Http\Request;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Repositories\ProductRepository;
-use function PHPSTORM_META\map;
+use function PHPUnit\Framework\isEmpty;
 
 class ProductController extends Controller
 {
@@ -24,8 +23,8 @@ class ProductController extends Controller
 
     public function index()
     {
-        $items = $this->productRepository->getAllProductsWithPaginator();
-        return view('product.index', compact('items'));
+        $items = $this->productRepository->getAllProductsWithPaginator(100);
+        return view('products.index', compact('items'));
     }
 
     /**
@@ -34,7 +33,7 @@ class ProductController extends Controller
     public function create()
     {
         $item = new Product();
-        return view('product.create', compact('item'));
+        return view('products.create', compact('item'));
     }
 
 
@@ -45,7 +44,7 @@ class ProductController extends Controller
     {
         $data = $request->input();
         // получение данных атрибутов
-        $data['data'] = array_combine($data['attr_key'], $data['attr_value']);
+        $data['data'] = key_exists('attr_key', $data) ? array_combine($data['attr_key'], $data['attr_value']) : '{}';
 
         $item = new Product($data);
 
@@ -74,7 +73,7 @@ class ProductController extends Controller
             abort(404);
         }
 
-        return view('product.edit', compact('item'));
+        return view('products.edit', compact('item'));
     }
 
     /**
@@ -82,24 +81,24 @@ class ProductController extends Controller
      */
     public function update(ProductUpdateRequest $request, $product_id)
     {
-
         $item = $this->productRepository->getEdit($product_id);
         if (empty($item)) {
             return back()->withErrors(['msg'=>"Запись {$product_id} не найдена"])->withInput();
         }
 
         $data = $request->all();
+
         // получение данных атрибутов
-        $data['data'] = array_combine($data['attr_key'], $data['attr_value']);
+        $data['data'] = key_exists('attr_key', $data) ? array_combine($data['attr_key'], $data['attr_value']) : '{}';
 
         $result = $item->update($data);
         if ($result) {
             return redirect()->route('products.edit', $item->id)->with(['success'=>'Успешно сохранено']);
         }
         else{
-            return back()->withErrors(['msg' => 'Ошибка сохранения'])->withInput();
+            $mes = !auth()->user()->HasRole('admin') ? 'Возможно недостаточно прав доступа' : '';
+            return back()->withErrors(['msg' => 'Ошибка сохранения. '.$mes])->withInput();
         }
-
     }
 
     /**

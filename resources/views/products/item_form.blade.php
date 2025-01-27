@@ -3,7 +3,7 @@
     <div>
        <label for="article">Артикул</label>
        <input name="article" value="{{old('article', $item->article)}}"
-          id="article" type="text"  required>
+          id="article" type="text"  required @can('edit-article') readonly @endcan>
     </div>
     <div>
        <label for="name">Название</label>

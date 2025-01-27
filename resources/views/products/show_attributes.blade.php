@@ -1,4 +1,5 @@
 @isset($item->data)
+    @if($item->data != '{}')
     @foreach($item->data as $key => $value)
 
     <tr>
@@ -8,4 +9,5 @@
                    id="attr_value[]" type="text"> </td>
     </tr>
     @endforeach
+    @endif
 @endisset

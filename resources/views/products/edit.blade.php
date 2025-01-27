@@ -1,18 +1,19 @@
 <x-app-layout>
     <div>
-        <form method="POST" action="{{ route('products.store')}}">
+        <form method="POST" action="{{ route('products.update', $item->id) }}">
+            @method('PATCH')
             @csrf
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                @include('product.messeges')
+                @include('products.messeges')
 
-                <h1>Долбавить продукт</h1>
+                <h1>Редактировать {{$item->name}}</h1>
 
-                @include('product.item_form')
+                @include('products.item_form')
                 <h2>Атрибуты</h2>
 
                 <table id="attributes" class="col-md-12">
-
-                    @include('product.dinamic_attribute')
+                    @include('products.show_attributes')
+                    @include('products.dinamic_attribute')
                 </table>
 
             </div>

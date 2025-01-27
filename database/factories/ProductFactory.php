@@ -36,8 +36,8 @@ class ProductFactory extends Factory
 
         return [
             'article' => $arcticle,
-            'name' => "Товар ". rand(1,10),
-            'status' => 'available',
+            'name' => "Наименование товара". rand(1,10),
+            'status' => 'Доступен',
             'data' => $attributes,
         ];
     }
