@@ -21,7 +21,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('products', ProductController::class)
--> except(['show']);
+-> except(['show'])->middleware(['auth', 'verified']);
 
 
 require __DIR__.'/auth.php';
