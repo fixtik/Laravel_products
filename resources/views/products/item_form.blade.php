@@ -13,7 +13,7 @@
     <div>
        <label for="status">Статус</label>
 
-       <select name="status" id="status" placeholder="Статус" required>
+       <select name="status" id="status" required>
            @php if(empty($item->attributes))
                 $status='Доступен';
                 else $status=$item->status

@@ -58,10 +58,7 @@ class CreateProductNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
-            ->greeting('Здравствуйте!')
-            ->line('Пользователь' . $this->user_name . ' добавил новый товар ' . $this->product_name )
-            ->line('Всего хорошего!');
+        //
     }
 
 }

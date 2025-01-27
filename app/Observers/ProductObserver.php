@@ -19,8 +19,6 @@ class ProductObserver
             $username->notify(new CreateProductNotification($product->name, $username->name));
             dispatch(new CreateNewProductJob());
         }
-
-
     }
 
     public function updating(Product $product)

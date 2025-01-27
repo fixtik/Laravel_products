@@ -49,12 +49,12 @@ class Product extends Model
      */
     public function setDataAttribute($incomArray): void
     {
-            $this->attributes['data'] = json_encode($incomArray);
+        $this->attributes['data'] = json_encode($incomArray);
     }
 
     public function getDataAttribute()
     {
-         return json_decode($this->attributes['data']);
+        return json_decode($this->attributes['data']);
     }
 
 }
